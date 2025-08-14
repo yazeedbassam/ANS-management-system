@@ -1,0 +1,184 @@
+/* Updated background styles with new image and transparency */
+body.login-page-layout {
+    background-image: url('images/new_background.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed; /* Keep background fixed during scroll */
+}
+
+/* Adjust the overlay opacity to make background more visible but still readable */
+body.login-page-layout::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.2); /* Reduced opacity for more transparency */
+    z-index: 1;
+}
+
+/* Move login card to the left side */
+.login-area {
+    justify-content: flex-start;
+    padding-left: 1%;
+    padding-top: 10%;
+}
+
+/* Add animated aircraft elements */
+.animated-aircraft-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 5;
+    pointer-events: none; /* Allow clicks to pass through */
+    overflow: hidden;
+}
+
+.animated-aircraft {
+    position: absolute;
+    opacity: 0.6; /* Semi-transparent */
+    filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.3));
+}
+
+.aircraft-1 {
+    width: 120px;
+    height: 60px;
+    top: 15%;
+    left: -120px; /* Start off-screen */
+    animation: fly-right 30s linear infinite;
+}
+
+.aircraft-2 {
+    width: 100px;
+    height: 50px;
+    top: 40%;
+    right: -100px; /* Start off-screen */
+    animation: fly-left 25s linear infinite;
+    animation-delay: 5s;
+}
+
+.helicopter {
+    width: 80px;
+    height: 50px;
+    top: 25%;
+    left: -80px; /* Start off-screen */
+    animation: helicopter-path 40s linear infinite;
+    animation-delay: 10s;
+}
+
+/* Animation keyframes for aircraft */
+@keyframes fly-right {
+    0% {
+        transform: translateX(0) translateY(0);
+        opacity: 0;
+    }
+    5% {
+        opacity: 0.6;
+    }
+    95% {
+        opacity: 0.6;
+    }
+    100% {
+        transform: translateX(calc(100vw + 120px)) translateY(20vh);
+        opacity: 0;
+    }
+}
+
+@keyframes fly-left {
+    0% {
+        transform: translateX(0) translateY(0) rotate(180deg);
+        opacity: 0;
+    }
+    5% {
+        opacity: 0.6;
+    }
+    95% {
+        opacity: 0.6;
+    }
+    100% {
+        transform: translateX(calc(-100vw - 100px)) translateY(-10vh) rotate(180deg);
+        opacity: 0;
+    }
+}
+
+@keyframes helicopter-path {
+    0% {
+        transform: translateX(0) translateY(0);
+        opacity: 0;
+    }
+    5% {
+        opacity: 0.6;
+    }
+    25% {
+        transform: translateX(25vw) translateY(10vh);
+    }
+    50% {
+        transform: translateX(50vw) translateY(-5vh);
+    }
+    75% {
+        transform: translateX(75vw) translateY(15vh);
+    }
+    95% {
+        opacity: 0.6;
+    }
+    100% {
+        transform: translateX(100vw) translateY(0);
+        opacity: 0;
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+    .login-area {
+        padding-left: 3%;
+    }
+    
+    .animated-aircraft {
+        opacity: 0.4; /* More transparent on smaller screens */
+    }
+}
+
+@media (max-width: 768px) {
+    .login-area {
+        padding-left: 0;
+        justify-content: center; /* Center on mobile */
+    }
+    
+    .aircraft-1, .aircraft-2 {
+        width: 80px;
+        height: 40px;
+    }
+    
+    .helicopter {
+        width: 60px;
+        height: 40px;
+    }
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+    .animated-aircraft {
+        animation: none !important;
+        opacity: 0.3;
+        /* Position statically instead of animating */
+        transform: none !important;
+    }
+    
+    .aircraft-1 {
+        top: 15%;
+        left: 70%;
+    }
+    
+    .aircraft-2 {
+        top: 40%;
+        left: 20%;
+    }
+    
+    .helicopter {
+        top: 25%;
+        left: 50%;
+    }
+}

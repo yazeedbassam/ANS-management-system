@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard - Air Traffic Management Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+        /* Basic styles for body and font */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f2f5; /* Light gray background */
+        }
+
+        /* Custom scrollbar for tables */
+        .overflow-x-auto::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .overflow-x-auto::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        .overflow-x-auto::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
+        }
+
+            .overflow-x-auto::-webkit-scrollbar-thumb:hover {
+                background: #555;
+            }
+
+        /* Background image with overlay */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://placehold.co/1920x1080/E0E0E0/FFFFFF?text=Background'); /* Placeholder image */
+            background-size: cover;
+            background-position: center;
+            opacity: 0.15; /* Reduced opacity for a subtle effect */
+            z-index: -1;
+        }
+
+        /* Style to expand tables */
+        .table-licenses {
+            width: 150%; /* Adjust this value as needed */
+            direction: ltr; /* Set table direction to left-to-right */
+            text-align: left; /* Align text inside table cells to the left */
+        }
+
+        .table th, .table td {
+            text-align: left; /* Ensure text alignment inside headers and cells is left */
+        }
+
+        /* To reduce space between table and sidebar (you might need to adjust these values) */
+        /* Adjusted margin-left and padding-left instead of margin-right and padding-right for LTR */
+        .container {
+            margin-left: 10px; /* Reduce left margin */
+            padding-left: 10px; /* Reduce left padding */
+        }
+
+        /* If .container doesn't work, you can try targeting body directly */
+        body {
+            padding-left: 10px;
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+    <div class="flex flex-grow">
+        <main class="flex-grow p-8 bg-gray-50">
+            <div id="dashboard-content" class="container mx-auto">
+                <h1 class="text-5xl font-extrabold text-gray-900 mb-10 text-center rounded-xl p-5 bg-gradient-to-r from-blue-600 to-indigo-700 text-white shadow-2xl">
+                    Admin Dashboard
+                </h1>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+                    <div id="card-controllers" class="bg-white rounded-2xl shadow-xl p-8 text-center transform hover:scale-105 transition-transform duration-300 border-b-8 border-blue-600 cursor-pointer flex flex-col items-center justify-center">
+                        <i class="fas fa-users text-blue-500 text-5xl mb-4"></i>
+                        <h2 class="text-2xl font-bold text-gray-800 mb-2">Total Controllers</h2>
+                        <p class="text-5xl font-extrabold text-blue-700">@Model.TotalControllers</p>
+                    </div>
+                    <div id="card-licenses" class="bg-white rounded-2xl shadow-xl p-8 text-center transform hover:scale-105 transition-transform duration-300 border-b-8 border-green-600 cursor-pointer flex flex-col items-center justify-center">
+                        <i class="fas fa-clipboard-list text-green-500 text-5xl mb-4"></i>
+                        <h2 class="text-2xl font-bold text-gray-800 mb-2">Total Licenses</h2>
+                        <p class="text-5xl font-extrabold text-green-700">@Model.TotalLicenses</p>
+                    </div>
+                    <div id="card-expired-licenses" class="bg-white rounded-2xl shadow-xl p-8 text-center transform hover:scale-105 transition-transform duration-300 border-b-8 border-red-600 cursor-pointer flex flex-col items-center justify-center">
+                        <i class="fas fa-calendar-times text-red-500 text-5xl mb-4"></i>
+                        <h2 class="text-2xl font-bold text-gray-800 mb-2">Expired Licenses</h2>
+                        <p class="text-5xl font-extrabold text-red-700">@Model.ExpiredLicenses</p>
+                    </div>
+                    <div id="card-soon-expiring-licenses" class="bg-white rounded-2xl shadow-xl p-8 text-center transform hover:scale-105 transition-transform duration-300 border-b-8 border-yellow-600 cursor-pointer flex flex-col items-center justify-center">
+                        <i class="fas fa-hourglass-half text-yellow-500 text-5xl mb-4"></i>
+                        <h2 class="text-2xl font-bold text-gray-800 mb-2">Licenses Expiring Soon (30 days)</h2>
+                        <p class="text-5xl font-extrabold text-yellow-700">@Model.SoonExpiringLicenses</p>
+                    </div>
+                </div>
+
+                <div id="controllersDetails" class="detail-section hidden bg-white rounded-2xl shadow-xl p-8 mb-12">
+                    <h2 class="text-3xl font-bold text-gray-800 mb-6 text-center">Controller Details</h2>
+                    @if (Model.ControllerDetails != null && Model.ControllerDetails.Count > 0)
+                    {
+                        <ul class="list-disc list-inside text-gray-700 text-lg space-y-2">
+                            @foreach (var controller in Model.ControllerDetails)
+                            {
+                                <li>@controller</li>
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <p class="text-gray-600 text-lg text-center">No controller details available.</p>
+                    }
+                </div>
+
+                <div id="licensesDetails" class="detail-section hidden bg-white rounded-2xl shadow-xl p-8 mb-12">
+                    <h2 class="text-3xl font-bold text-gray-800 mb-6 text-center">All Licenses Details</h2>
+                    @if (Model.AllLicensesDetails != null && Model.AllLicensesDetails.Count > 0)
+                    {
+                        <div class="overflow-x-auto rounded-lg border border-gray-200">
+                            <table class="min-w-full leading-normal bg-white">
+                                <thead>
+                                    <tr>
+                                        <th class="px-6 py-3 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider rounded-tl-lg">Air Traffic Controller Name</th>
+                                        <th class="px-6 py-3 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider rounded-tr-lg">Expiry Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var license in Model.AllLicensesDetails)
+                                    {
+                                        <tr class="hover:bg-gray-50 border-b border-gray-100 last:border-b-0">
+                                            <td class="px-6 py-4 text-sm text-gray-900"> @license.ControllerName</td>
+                                            <td class="px-6 py-4 text-sm text-gray-900">@license.ExpiryDate.ToShortDateString()</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="text-gray-600 text-lg text-center">No license details available.</p>
+                    }
+                </div>
+
+                <div id="expiredLicensesDetails" class="detail-section hidden bg-white rounded-2xl shadow-xl p-8 mb-12">
+                    <h2 class="text-3xl font-bold text-gray-800 mb-6 text-center">Expired Licenses Details</h2>
+                    @if (Model.ExpiredLicensesDetails != null && Model.ExpiredLicensesDetails.Count > 0)
+                    {
+                        <div class="overflow-x-auto rounded-lg border border-gray-200">
+                            <table class="min-w-full leading-normal bg-white">
+                                <thead>
+                                    <tr>
+                                        <th class="px-6 py-3 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider rounded-tl-lg">Air Traffic Controller Name</th>
+                                        <th class="px-6 py-3 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider rounded-tr-lg">Expiry Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var license in Model.ExpiredLicensesDetails)
+                                    {
+                                        <tr class="hover:bg-gray-50 border-b border-gray-100 last:border-b-0">
+                                            <td class="px-6 py-4 text-sm text-gray-900">@license.ControllerName</td>
+                                            <td class="px-6 py-4 text-sm text-gray-900">@license.ExpiryDate.ToShortDateString()</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="text-gray-600 text-lg text-center">No expired license details available.</p>
+                    }
+                </div>
+
+                <div id="soonExpiringLicensesDetails" class="detail-section hidden bg-white rounded-2xl shadow-xl p-8 mb-12">
+                    <h2 class="text-3xl font-bold text-gray-800 mb-6 text-center">Licenses Expiring Soon Details</h2>
+                    @if (Model.SoonExpiringLicensesDetails != null && Model.SoonExpiringLicensesDetails.Count > 0)
+                    {
+                        <div class="overflow-x-auto rounded-lg border border-gray-200">
+                            <table class="min-w-full leading-normal bg-white">
+                                <thead>
+                                    <tr>
+                                        <th class="px-6 py-3 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider rounded-tl-lg">Air Traffic Controller Name</th>
+                                        <th class="px-6 py-3 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider rounded-tr-lg">Expiry Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var license in Model.SoonExpiringLicensesDetails)
+                                    {
+                                        <tr class="hover:bg-gray-50 border-b border-gray-100 last:border-b-0">
+                                            <td class="px-6 py-4 text-sm text-gray-900">@license.ControllerName</td>
+                                            <td class="px-6 py-4 text-sm text-gray-900">@license.ExpiryDate.ToShortDateString()</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="text-gray-600 text-lg text-center">No soon-expiring license details available.</p>
+                    }
+                </div>
+
+                <div id="observationsDetails" class="detail-section hidden bg-white rounded-2xl shadow-xl p-8 mb-12">
+                    <h2 class="text-3xl font-bold text-gray-800 mb-6 text-center">Observation Data</h2>
+                    @if (Model.ObservationsData != null && Model.ObservationsData.Columns.Count > 0)
+                    {
+                        <div class="overflow-x-auto rounded-lg border border-gray-200">
+                            <table id="observationsTable" class="min-w-full leading-normal bg-white">
+                                <thead>
+                                    <tr>
+                                        @foreach (System.Data.DataColumn column in Model.ObservationsData.Columns)
+                                        {
+                                            <th class="px-6 py-3 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                                @column.ColumnName
+                                            </th>
+                                        }
+                                        <th class="px-6 py-3 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                            Actions
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        @foreach (System.Data.DataColumn column in Model.ObservationsData.Columns)
+                                        {
+                                            <th class="px-6 py-3 bg-white text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                                <input type="text" class="filter-input shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md p-2"
+                                                       placeholder="Filter @column.ColumnName" onkeyup="filterTable(this, '@column.ColumnName')">
+                                            </th>
+                                        }
+                                        <th class="px-6 py-3 bg-white text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                            &nbsp;
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (Model.ObservationsData.Rows.Count > 0)
+                                    {
+                                        @foreach (System.Data.DataRow row in Model.ObservationsData.Rows)
+                                        {
+                                            <tr class="hover:bg-gray-50 border-b border-gray-100 last:border-b-0">
+                                                @foreach (System.Data.DataColumn column in Model.ObservationsData.Columns)
+                                                {
+                                                    <td class="px-6 py-4 text-sm text-gray-900">
+                                                        <p class="whitespace-no-wrap">
+                                                            @row[column.ColumnName]
+                                                        </p>
+                                                    </td>
+                                                }
+                                                <td class="px-6 py-4 text-sm text-gray-900 flex space-x-2 justify-start">
+                                                    <a href="#" class="text-blue-600 hover:text-blue-900 transition duration-200"><i class="fas fa-eye"></i> View</a>
+                                                    <a href="#" class="text-green-600 hover:text-green-900 transition duration-200"><i class="fas fa-edit"></i> Edit</a>
+                                                    <a href="#" class="text-red-600 hover:text-red-900 transition duration-200"><i class="fas fa-trash-alt"></i> Delete</a>
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <tr><td class="px-6 py-4 bg-white text-sm text-center text-gray-600" colspan="@(Model.ObservationsData.Columns.Count + 1)">No observation data available.</td></tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="text-gray-600 text-lg text-center">No observation data available.</p>
+                    }
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+                    <div class="bg-white rounded-2xl shadow-xl p-8">
+                        <h2 class="text-3xl font-bold text-gray-800 mb-6 text-center">Certificate Status Distribution</h2>
+                        <div class="flex justify-center items-center">
+                            <canvas id="certChart" class="max-w-xl max-h-96"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-xl p-8 mb-12">
+                    <h2 class="text-3xl font-bold text-gray-800 mb-6 text-center">Comprehensive Air Traffic Controller Details</h2>
+                    @if (Model.AllControllersFullDetails != null && Model.AllControllersFullDetails.Count > 0)
+                    {
+                        <div class="overflow-x-auto rounded-lg border border-gray-200">
+                            <table id="controllersFullDetailsTable" class="min-w-full leading-normal bg-white">
+                                <thead>
+                                    <tr>
+                                        <th class="px-6 py-3 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider rounded-tl-lg">Air Traffic Controller Name</th>
+                                        <th class="px-6 py-3 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Associated Licenses</th>
+                                        <th class="px-6 py-3 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Associated Certificates</th>
+                                        <th class="px-6 py-3 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider rounded-tr-lg">License Expiry Dates</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var controllerData in Model.AllControllersFullDetails)
+                                    {
+                                        <tr class="hover:bg-gray-50 border-b border-gray-100 last:border-b-0">
+                                            <td class="px-6 py-4 text-sm text-gray-900">@controllerData.FullName</td>
+                                            <td class="px-6 py-4 text-sm text-gray-900">
+                                                @if (controllerData.LicenseDetails != null && controllerData.LicenseDetails.Count > 0)
+                                                {
+                                                    <ul class="list-disc list-inside space-y-1">
+                                                        @foreach (var licenseDetail in controllerData.LicenseDetails)
+                                                        {
+                                                            <li>@licenseDetail</li>
+                                                        }
+                                                    </ul>
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-gray-600">No licenses</span>
+                                                }
+                                            </td>
+                                            <td class="px-6 py-4 text-sm text-gray-900">
+                                                @if (controllerData.CertificateDetails != null && controllerData.CertificateDetails.Count > 0)
+                                                {
+                                                    <ul class="list-disc list-inside space-y-1">
+                                                        @foreach (var certDetail in controllerData.CertificateDetails)
+                                                        {
+                                                            <li>@certDetail</li>
+                                                        }
+                                                    </ul>
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-gray-600">No certificates</span>
+                                                }
+                                            </td>
+                                            <td class="px-6 py-4 text-sm text-gray-900">
+                                                @if (controllerData.LicenseExpiryDates != null && controllerData.LicenseExpiryDates.Count > 0)
+                                                {
+                                                    <ul class="list-disc list-inside space-y-1">
+                                                        @foreach (var expiryDate in controllerData.LicenseExpiryDates)
+                                                        {
+                                                            <li>@(expiryDate?.ToShortDateString() ?? "N/A")</li>
+                                                        }
+                                                    </ul>
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-gray-600">No license expiry dates</span>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="text-gray-600 text-lg text-center">No comprehensive controller details available.</p>
+                    }
+                </div>
+
+                <div class="text-center mt-10">
+                    <button onclick="downloadDashboardPDF()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300">
+                        <i class="fas fa-file-pdf ml-3"></i> Download as PDF
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Function to toggle visibility of detail sections
+        function toggleDetails(detailsId) {
+            const allDetails = document.querySelectorAll('.detail-section'); // Select all elements with class 'detail-section'
+            allDetails.forEach(div => {
+                if (div.id !== detailsId) { // Hide other sections
+                    div.classList.add('hidden');
+                }
+            });
+
+            const detailsDiv = document.getElementById(detailsId);
+            if (detailsDiv) {
+                detailsDiv.classList.toggle('hidden'); // Toggle visibility of the clicked section
+            }
+        }
+
+        // Logout function using SweetAlert2 for confirmation
+        function logout() {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You will be logged out of the system.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, log me out',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Submit the logout form
+                    document.querySelector('form[action="/Account/Logout"]').submit();
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Attach click listeners to KPI cards
+            document.getElementById('card-controllers')?.addEventListener('click', () => toggleDetails('controllersDetails'));
+            document.getElementById('card-licenses')?.addEventListener('click', () => toggleDetails('licensesDetails'));
+            document.getElementById('card-expired-licenses')?.addEventListener('click', () => toggleDetails('expiredLicensesDetails'));
+            document.getElementById('card-soon-expiring-licenses')?.addEventListener('click', () => toggleDetails('soonExpiringLicensesDetails'));
+            document.getElementById('card-observations')?.addEventListener('click', () => toggleDetails('observationsDetails'));
+
+            // Certificate Status Chart (Bar Chart)
+            var certCtx = document.getElementById('certChart');
+            // Ensure Model.CertificateStats is properly serialized and passed
+            var certStatsData = @Html.Raw(Json.Serialize(Model.CertificateStats ?? new Dictionary<string, int>())); // Provide empty dict if null
+
+            if (certCtx && Object.keys(certStatsData).length > 0) { // Check if data exists
+                new Chart(certCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: Object.keys(certStatsData),
+                        datasets: [{
+                            label: 'Number of Certificates',
+                            data: Object.values(certStatsData),
+                            backgroundColor: [
+                                'rgba(54, 162, 235, 0.8)', // Blue for Pending
+                                'rgba(75, 192, 192, 0.8)', // Green for Completed
+                                'rgba(255, 99, 132, 0.8)'  // Red for Rejected
+                            ],
+                            borderColor: [
+                                'rgba(54, 162, 235, 1)',
+                                'rgba(75, 192, 192, 1)',
+                                'rgba(255, 99, 132, 1)'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        indexAxis: 'y', // Horizontal bars
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            x: {
+                                beginAtZero: true,
+                                ticks: {
+                                    precision: 0 // Ensure whole numbers for counts
+                                }
+                            },
+                            y: {
+                                beginAtZero: true
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                            title: {
+                                display: false,
+                            }
+                        }
+                    }
+                });
+            } else if (certCtx) {
+                // Display a message if no chart data
+                certCtx.style.display = 'none'; // Hide canvas
+                const parentDiv = certCtx.parentElement;
+                const noDataMessage = document.createElement('p');
+                noDataMessage.className = 'text-gray-600 text-lg text-center mt-4';
+                noDataMessage.textContent = 'No certificate data to display in the chart.';
+                parentDiv.appendChild(noDataMessage);
+            }
+
+            // Table filtering function (used for Observations table)
+            // This function is now defined inside DOMContentLoaded to ensure it's available
+            window.filterTable = function(input, columnName) { // Make it global for onkeyup
+                var table = document.getElementById("observationsTable");
+                if (!table) return; // Exit if table not found
+
+                var tbody = table.getElementsByTagName("tbody")[0];
+                if (!tbody) return; // Exit if tbody not found
+
+                var rows = tbody.getElementsByTagName("tr");
+                var filterValue = input.value.toUpperCase();
+                var columnIndex = -1; // Initialize with -1 to indicate not found
+
+                var headerRow = table.getElementsByTagName("thead")[0].getElementsByTagName("tr")[0];
+                if (headerRow) {
+                    for (var i = 0; i < headerRow.cells.length; i++) {
+                        // Use innerText for better compatibility and to ignore HTML tags
+                        if (headerRow.cells[i].innerText.trim().toUpperCase() === columnName.toUpperCase()) {
+                            columnIndex = i;
+                            break;
+                        }
+                    }
+                }
+
+                if (columnIndex !== -1) {
+                    for (var i = 0; i < rows.length; i++) {
+                        var td = rows[i].getElementsByTagName("td")[columnIndex];
+                        if (td) {
+                            var textValue = td.textContent.toUpperCase();
+                            if (textValue.indexOf(filterValue) > -1) {
+                                rows[i].style.display = "";
+                            } else {
+                                rows[i].style.display = "none";
+                            }
+                        }
+                    }
+                }
+            };
+
+            // Function to download dashboard as PDF
+            window.downloadDashboardPDF = function() { // Make it global for onclick
+                Swal.fire({
+                    title: 'Generating PDF...',
+                    text: 'Please wait.',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+
+                const { jsPDF } = window.jspdf;
+                if (!jsPDF) {
+                    Swal.fire('Error!', 'jsPDF library not loaded correctly.', 'error');
+                    return;
+                }
+
+                const dashboardContent = document.getElementById('dashboard-content');
+
+                if (!dashboardContent) {
+                    Swal.fire('Error!', 'Dashboard content not found.', 'error');
+                    return;
+                }
+
+                // Use html2canvas to render the HTML content to a canvas
+                html2canvas(dashboardContent, {
+                    scale: 2, // Increase scale for better resolution in PDF
+                    useCORS: true // Enable CORS if you have external images/resources
+                }).then(canvas => {
+                    const imgData = canvas.toDataURL('image/png');
+                    const pdf = new jsPDF('p', 'pt', 'a4');
+                    const imgWidth = pdf.internal.pageSize.getWidth();
+                    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+                    let position = 0;
+
+                    // Add image to PDF, handling multiple pages if content is long
+                    if (imgHeight > pdf.internal.pageSize.getHeight()) {
+                        let heightLeft = imgHeight;
+                        while (heightLeft >= 0) {
+                            position = heightLeft - imgHeight;
+                            pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                            heightLeft -= pdf.internal.pageSize.getHeight();
+                            if (heightLeft > 0) {
+                                pdf.addPage();
+                            }
+                        }
+                    } else {
+                        pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+                    }
+
+                    Swal.close(); // Close loading spinner
+                    pdf.save('Admin_Dashboard.pdf');
+                    Swal.fire('Success!', 'Dashboard downloaded as PDF.', 'success');
+                }).catch(error => {
+                    Swal.fire('Download Error!', 'An error occurred while creating the PDF: ' + error.message, 'error');
+                });
+            };
+        });
+    </script>
+</body>
+</html>

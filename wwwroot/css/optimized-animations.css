@@ -1,0 +1,216 @@
+/* Enhanced animation styles for aircraft and helicopter */
+
+/* Improve aircraft animations with smoother paths */
+@keyframes fly-right {
+    0% {
+        transform: translateX(0) translateY(0);
+        opacity: 0;
+    }
+    5% {
+        opacity: 0.7;
+    }
+    25% {
+        transform: translateX(calc(25vw)) translateY(5vh);
+    }
+    50% {
+        transform: translateX(calc(50vw)) translateY(-5vh);
+    }
+    75% {
+        transform: translateX(calc(75vw)) translateY(10vh);
+    }
+    95% {
+        opacity: 0.7;
+    }
+    100% {
+        transform: translateX(calc(100vw + 120px)) translateY(0);
+        opacity: 0;
+    }
+}
+
+@keyframes fly-left {
+    0% {
+        transform: translateX(0) translateY(0) rotate(180deg);
+        opacity: 0;
+    }
+    5% {
+        opacity: 0.7;
+    }
+    25% {
+        transform: translateX(calc(-25vw)) translateY(-5vh) rotate(180deg);
+    }
+    50% {
+        transform: translateX(calc(-50vw)) translateY(5vh) rotate(180deg);
+    }
+    75% {
+        transform: translateX(calc(-75vw)) translateY(-10vh) rotate(180deg);
+    }
+    95% {
+        opacity: 0.7;
+    }
+    100% {
+        transform: translateX(calc(-100vw - 100px)) translateY(0) rotate(180deg);
+        opacity: 0;
+    }
+}
+
+/* Add a third aircraft with different path */
+.aircraft-3 {
+    width: 90px;
+    height: 45px;
+    top: 60%;
+    left: -90px;
+    animation: fly-diagonal 35s linear infinite;
+    animation-delay: 15s;
+}
+
+@keyframes fly-diagonal {
+    0% {
+        transform: translateX(0) translateY(0) rotate(-15deg);
+        opacity: 0;
+    }
+    5% {
+        opacity: 0.7;
+    }
+    100% {
+        transform: translateX(calc(100vw + 90px)) translateY(-40vh) rotate(-15deg);
+        opacity: 0;
+    }
+}
+
+/* Enhance helicopter animation with hover effect */
+@keyframes helicopter-path {
+    0% {
+        transform: translateX(0) translateY(0);
+        opacity: 0;
+    }
+    5% {
+        opacity: 0.7;
+    }
+    20% {
+        transform: translateX(20vw) translateY(5vh);
+    }
+    25% {
+        transform: translateX(25vw) translateY(5vh);
+    }
+    30% {
+        transform: translateX(25vw) translateY(5vh);
+    }
+    50% {
+        transform: translateX(50vw) translateY(-10vh);
+    }
+    55% {
+        transform: translateX(50vw) translateY(-10vh);
+    }
+    60% {
+        transform: translateX(50vw) translateY(-10vh);
+    }
+    80% {
+        transform: translateX(75vw) translateY(15vh);
+    }
+    85% {
+        transform: translateX(75vw) translateY(15vh);
+    }
+    95% {
+        opacity: 0.7;
+    }
+    100% {
+        transform: translateX(100vw) translateY(0);
+        opacity: 0;
+    }
+}
+
+/* Enhance rotor animations */
+@keyframes rotate-rotor {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.helicopter-rotor {
+    animation: rotate-rotor 0.15s linear infinite;
+}
+
+.helicopter-tail-rotor {
+    animation: rotate-rotor 0.3s linear infinite;
+}
+
+/* Add subtle glow effect to aircraft */
+.animated-aircraft {
+    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.4));
+}
+
+/* Improve aircraft trail effects */
+.aircraft-1::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: -50px;
+    width: 50px;
+    height: 2px;
+    background: linear-gradient(to left, rgba(255, 255, 255, 0.7), transparent);
+    z-index: -1;
+}
+
+.aircraft-2::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: -50px;
+    width: 50px;
+    height: 2px;
+    background: linear-gradient(to right, rgba(255, 255, 255, 0.7), transparent);
+    z-index: -1;
+}
+
+.aircraft-3::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: -40px;
+    width: 40px;
+    height: 2px;
+    background: linear-gradient(to left, rgba(255, 255, 255, 0.7), transparent);
+    z-index: -1;
+    transform: rotate(-15deg);
+}
+
+/* Performance optimizations */
+.animated-aircraft {
+    will-change: transform, opacity;
+    backface-visibility: hidden;
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+    .animated-aircraft {
+        opacity: 0.5;
+    }
+    
+    .aircraft-1::after,
+    .aircraft-2::after,
+    .aircraft-3::after {
+        width: 30px;
+    }
+}
+
+@media (max-width: 768px) {
+    .animated-aircraft {
+        opacity: 0.4;
+    }
+    
+    .aircraft-3 {
+        display: none; /* Hide third aircraft on smaller screens */
+    }
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+    .animated-aircraft {
+        animation: none !important;
+        opacity: 0.3;
+    }
+    
+    .helicopter-rotor,
+    .helicopter-tail-rotor {
+        animation: rotate-rotor 1s linear infinite !important; /* Slower rotation */
+    }
+}

@@ -1,0 +1,150 @@
+﻿body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-image: url('https://images.unsplash.com/photo-1569154941061-e231b4725ef1?q=80&w=1920');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.3;
+    z-index: -1;
+}
+
+/* Sidebar الأساسي */
+.atc-sidebar {
+    width: 220px;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #f5fafc 80%, #d8f4f4 100%);
+    box-shadow: 2px 0 15px 0 #dde6e9c9;
+    border-right: 1.5px solid #e1efed;
+    position: fixed;
+    top: auto;
+    left: 0;
+    z-index: 1200;
+    display: flex;
+    flex-direction: column;
+    padding-top: 18px !important;
+    transition: transform 0.22s, width 0.2s;
+    transform: translateX(0);
+}
+
+/* محتوى رئيسي يأخذ مساحة السايدبار */
+.atc-main-content {
+    margin-left: 220px;
+    transition: margin-left 0.2s;
+}
+
+/* زر القائمة للموبايل */
+#openSidebarBtn {
+    display: none;
+    position: fixed;
+    left: 15px;
+    top: 18px;
+    z-index: 1250;
+    background: #198754;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    width: 40px;
+    height: 40px;
+    font-size: 1.5em;
+    box-shadow: 0 1px 6px #b5d1cd34;
+}
+
+.overlay-bg {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(80,105,110,0.13);
+    z-index: 1199;
+    display: none;
+}
+
+    .overlay-bg.active {
+        display: block;
+    }
+
+/* media query: عند الشاشات الصغيرة */
+@media (max-width: 991px) {
+    .atc-sidebar {
+        transform: translateX(-100%);
+        width: 220px;
+        min-height: 100vh;
+    }
+
+        .atc-sidebar.active {
+            transform: translateX(0);
+        }
+
+    #openSidebarBtn {
+        display: block;
+    }
+
+    .atc-main-content {
+        margin-left: 0 !important;
+    }
+}
+
+@media (max-width: 600px) {
+    .atc-sidebar {
+        font-size: 0.97em;
+        padding: 8px 3px !important;
+    }
+
+        .atc-sidebar .nav-link {
+            font-size: 0.98em;
+            padding: 9px 10px;
+        }
+}
+
+/* Sidebar Links */
+.atc-sidebar .nav-link {
+    color: #195c4d;
+    font-size: 1.05em;
+    border-radius: 9px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    padding: 8px 13px;
+    transition: background 0.15s, color 0.14s;
+    letter-spacing: .1px;
+}
+
+    .atc-sidebar .nav-link.active,
+    .atc-sidebar .nav-link:hover,
+    .atc-sidebar .nav-link:focus {
+        background: #e1f6f4;
+        color: #0d423a !important;
+        font-weight: 700;
+    }
+
+.atc-sidebar .bi {
+    font-size: 1.18em;
+    opacity: 0.88;
+}
+
+.atc-sidebar ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.atc-sidebar li + li {
+    margin-top: 6px;
+}
+
+.sidebar-logo {
+    font-size: 1.25em;
+    font-weight: 800;
+    color: #137865;
+    text-align: center;
+    padding-bottom: 13px;
+    border-bottom: 1.3px solid #dbedec;
+    margin-bottom: 18px;
+    letter-spacing: .6px;
+}

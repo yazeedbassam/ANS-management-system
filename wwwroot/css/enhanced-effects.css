@@ -1,0 +1,105 @@
+/* SVG for helicopter animation */
+.helicopter-svg {
+    width: 100%;
+    height: 100%;
+}
+
+.helicopter-body {
+    fill: rgba(255, 255, 255, 0.8);
+    stroke: rgba(0, 123, 255, 0.9);
+    stroke-width: 2;
+}
+
+.helicopter-rotor {
+    fill: rgba(200, 200, 200, 0.7);
+    transform-origin: center;
+    animation: rotate-rotor 0.5s linear infinite;
+}
+
+.helicopter-tail {
+    fill: rgba(255, 255, 255, 0.8);
+    stroke: rgba(0, 123, 255, 0.9);
+    stroke-width: 1;
+}
+
+.helicopter-tail-rotor {
+    fill: rgba(200, 200, 200, 0.7);
+    transform-origin: center;
+    animation: rotate-rotor 0.8s linear infinite;
+}
+
+@keyframes rotate-rotor {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Airplane SVG styles */
+.airplane-svg {
+    width: 100%;
+    height: 100%;
+}
+
+.airplane-body {
+    fill: rgba(255, 255, 255, 0.8);
+    stroke: rgba(0, 123, 255, 0.9);
+    stroke-width: 2;
+}
+
+.airplane-wing {
+    fill: rgba(230, 230, 230, 0.8);
+    stroke: rgba(0, 123, 255, 0.9);
+    stroke-width: 1;
+}
+
+.airplane-tail {
+    fill: rgba(200, 200, 200, 0.8);
+    stroke: rgba(0, 123, 255, 0.9);
+    stroke-width: 1;
+}
+
+/* Enhanced background blend */
+body.login-page-layout::before {
+    background: linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0.3) 0%,
+        rgba(0, 20, 40, 0.2) 50%,
+        rgba(0, 0, 0, 0.3) 100%
+    );
+    backdrop-filter: blur(1px);
+}
+
+/* Improved login card visibility */
+.login-card {
+    background-color: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 5px 30px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Enhanced side menu visibility */
+.side-menu-item {
+    background-color: rgba(0, 123, 255, 0.85);
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Improved radar visibility */
+.radar-screen {
+    background-color: rgba(0, 30, 60, 0.6);
+    backdrop-filter: blur(3px);
+}
+
+/* Light trails for aircraft */
+.aircraft-1::after,
+.aircraft-2::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 100px;
+    height: 2px;
+    background: linear-gradient(to left, rgba(255, 255, 255, 0.6), transparent);
+    z-index: -1;
+}
+
+.aircraft-2::after {
+    background: linear-gradient(to right, rgba(255, 255, 255, 0.6), transparent);
+}

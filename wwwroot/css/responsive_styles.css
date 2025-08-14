@@ -1,0 +1,104 @@
+/* Responsive styles for ATC Login Page */
+
+/* For screens smaller than 768px (mobile devices) */
+@media (max-width: 768px) {
+    .login-body {
+        flex-direction: column;
+        width: 100%;
+        height: auto;
+        padding: 1rem;
+    }
+    
+    .login-container {
+        width: 90%;
+        padding: 1.5rem;
+    }
+    
+    .project-title {
+        font-size: 1.8rem;
+    }
+    
+    .atcs-logo-fixed {
+        width: 80px;
+        height: 80px;
+        top: 10px;
+        right: 10px;
+    }
+    
+    .radar-screen-container {
+        width: 150px;
+        height: 150px;
+        top: 100px;
+        left: 20px;
+    }
+    
+    .control-tower {
+        bottom: 100px;
+        right: 50px;
+        width: 200px;
+        height: 400px;
+    }
+    
+    .runway-container {
+        width: 90%;
+    }
+    
+    .airplane {
+        width: 200px;
+        height: 70px;
+    }
+    
+    .info-panel {
+        width: 90%;
+        max-width: none;
+    }
+}
+
+/* For screens between 768px and 1024px (tablets) */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .login-body {
+        width: 100%;
+    }
+    
+    .login-container {
+        width: 350px;
+    }
+    
+    .atcs-logo-fixed {
+        width: 100px;
+        height: 100px;
+    }
+    
+    .radar-screen-container {
+        width: 180px;
+        height: 180px;
+    }
+    
+    .control-tower {
+        width: 250px;
+        height: 500px;
+    }
+}
+
+/* For screens larger than 1024px (desktops) */
+@media (min-width: 1025px) {
+    .login-body {
+        width: 100%;
+    }
+}
+
+/* For very large screens */
+@media (min-width: 1440px) {
+    .project-title {
+        font-size: 3rem;
+    }
+    
+    .login-container {
+        width: 450px;
+    }
+    
+    .radar-screen-container {
+        width: 250px;
+        height: 250px;
+    }
+}

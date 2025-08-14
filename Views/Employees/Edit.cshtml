@@ -1,0 +1,169 @@
+﻿@model WebApplication1.Models.Employee
+
+@{
+    ViewData["Title"] = "Edit Employee";
+}
+
+<style>
+    .custom-card {
+        margin-top: 20px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    .custom-header {
+        font-size: 1.15rem;
+        font-weight: 600;
+        letter-spacing: .5px;
+        color: #0d6efd; /* Blue color for header */
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background-color: #f8f9fa;
+    }
+
+    .form-section-header {
+        font-size: 1rem;
+        font-weight: 600;
+        color: #343a40;
+        margin-top: 1.5rem;
+        margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid #dee2e6;
+    }
+
+    .form-control-sm, .form-select-sm {
+        font-size: 0.85rem;
+    }
+
+    .col-form-label-sm {
+        font-weight: 500;
+    }
+
+    .btn-group-custom {
+        display: flex;
+        gap: 10px;
+    }
+</style>
+
+<div class="row justify-content-center">
+    <div class="col-lg-10 col-xl-9">
+        <div class="card custom-card">
+            <div class="card-header custom-header">
+                <i class="fas fa-user-edit"></i>
+                Edit Employee: @Model.FullName
+            </div>
+            <div class="card-body p-4">
+                <form id="editEmployeeForm" asp-action="Edit" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                    <input type="hidden" asp-for="EmployeeID" />
+
+                    <div class="row">
+                        <!-- Left Column -->
+                        <div class="col-md-6">
+                            <h5 class="form-section-header">User Details</h5>
+                            <div class="row mb-3 align-items-center">
+                                <label asp-for="FullName" class="col-md-4 col-form-label col-form-label-sm"></label>
+                                <div class="col-md-8">
+                                    <input asp-for="FullName" class="form-control form-control-sm" />
+                                    <span asp-validation-for="FullName" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row mb-3 align-items-center">
+                                <label asp-for="EmployeeOfficialID" class="col-md-4 col-form-label col-form-label-sm"></label>
+                                <div class="col-md-8">
+                                    <input asp-for="EmployeeOfficialID" class="form-control form-control-sm"  />
+                                </div>
+                            </div>
+                            <div class="row mb-3 align-items-center">
+                                <label asp-for="JobTitle" class="col-md-4 col-form-label col-form-label-sm"></label>
+                                <div class="col-md-8">
+                                    <select asp-for="JobTitle" asp-items="ViewBag.JobTitles" class="form-select form-select-sm">
+                                        <option value="">-- Select Job Title --</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mb-3 align-items-center">
+                                <label asp-for="Department" class="col-md-4 col-form-label col-form-label-sm"></label>
+                                <div class="col-md-8">
+                                    <select asp-for="Department" asp-items="ViewBag.Departments" class="form-select form-select-sm">
+                                        <option value="">-- Select Department --</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mb-3 align-items-center">
+                                <label asp-for="HireDate" class="col-md-4 col-form-label col-form-label-sm"></label>
+                                <div class="col-md-8">
+                                    <input asp-for="HireDate" class="form-control form-control-sm" type="date"  />
+                                    @* <span class="form-text small">Hire Date cannot be changed.</span> *@
+                                </div>
+                            </div>
+                            <div class="row mb-3 align-items-center">
+                                <label asp-for="Gender" class="col-md-4 col-form-label col-form-label-sm"></label>
+                                <div class="col-md-8">
+                                    <select asp-for="Gender" asp-items="ViewBag.Gender" class="form-select form-select-sm">
+                                        <option value="">-- Select Gender --</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right Column -->
+                        <div class="col-md-6">
+                            <h5 class="form-section-header">Contact & Location</h5>
+                            <div class="row mb-3 align-items-center">
+                                <label asp-for="Email" class="col-md-4 col-form-label col-form-label-sm"></label>
+                                <div class="col-md-8">
+                                    <input asp-for="Email" class="form-control form-control-sm" />
+                                </div>
+                            </div>
+                            <div class="row mb-3 align-items-center">
+                                <label asp-for="PhoneNumber" class="col-md-4 col-form-label col-form-label-sm"></label>
+                                <div class="col-md-8">
+                                    <input asp-for="PhoneNumber" class="form-control form-control-sm" />
+                                </div>
+                            </div>
+                            <div class="row mb-3 align-items-center">
+                                <label asp-for="EmergencyContactPhone" class="col-md-4 col-form-label col-form-label-sm"></label>
+                                <div class="col-md-8">
+                                    <input asp-for="EmergencyContactPhone" class="form-control form-control-sm" />
+                                </div>
+                            </div>
+                            <div class="row mb-3 align-items-center">
+                                <label asp-for="Location" class="col-md-4 col-form-label col-form-label-sm"></label>
+                                <div class="col-md-8">
+                                    <input asp-for="Location" class="form-control form-control-sm" />
+                                </div>
+                            </div>
+                            <div class="row mb-3 align-items-center">
+                                <label asp-for="Address" class="col-md-4 col-form-label col-form-label-sm"></label>
+                                <div class="col-md-8">
+                                    <textarea asp-for="Address" class="form-control form-control-sm" rows="2"></textarea>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-8 offset-md-4">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" asp-for="IsActive" />
+                                        <label class="form-check-label" asp-for="IsActive"></label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 border-top pt-3 btn-group-custom">
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-save me-2"></i>Save Changes</button>
+                        <a asp-action="Index" class="btn btn-secondary"><i class="fas fa-arrow-left me-2"></i>Back to List</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

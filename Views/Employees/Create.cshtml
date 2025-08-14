@@ -1,0 +1,321 @@
+﻿@model WebApplication1.Models.CreateEmployeeViewModel
+@{
+    ViewData["Title"] = "Create New User";
+}
+
+<style>
+    .custom-card {
+        margin-top: 20px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    .custom-header {
+        font-size: 1.15rem;
+        font-weight: 600;
+        letter-spacing: .5px;
+        color: #198754; /* Green color for create header */
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background-color: #f8f9fa;
+    }
+
+    .form-section-header {
+        font-size: 1rem;
+        font-weight: 600;
+        color: #343a40;
+        margin-top: 1.5rem;
+        margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid #dee2e6;
+    }
+
+    .form-control-sm, .form-select-sm {
+        font-size: 0.85rem;
+    }
+
+    .col-form-label-sm {
+        font-weight: 500;
+    }
+
+    .btn-group-custom {
+        display: flex;
+        gap: 10px;
+    }
+
+    /* Simple Modal Styles */
+    .modal-backdrop {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 1040;
+        display: none; /* Hidden by default */
+    }
+
+    .modal-custom {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        z-index: 1050;
+        width: 90%;
+        max-width: 400px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        display: none; /* Hidden by default */
+    }
+
+    .modal-header-custom {
+        border-bottom: 1px solid #dee2e6;
+        padding-bottom: 10px;
+        margin-bottom: 15px;
+        font-size: 1.25rem;
+        font-weight: 500;
+    }
+
+    .modal-body-custom {
+        margin-bottom: 20px;
+    }
+
+    .modal-footer-custom {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+    }
+
+</style>
+
+<div class="row justify-content-center">
+    <div class="col-lg-10 col-xl-9">
+        <div class="card custom-card">
+            <div class="card-header custom-header">
+                <i class="fa-solid fa-user-plus"></i>
+                Create New User
+            </div>
+            <div class="card-body p-4">
+                <form id="createEmployeeForm" asp-action="Create" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                    <div class="row">
+                        <!-- Left Column -->
+                        <div class="col-md-6">
+                            <h5 class="form-section-header">User Details</h5>
+                            <div class="row mb-3 align-items-center">
+                                <label asp-for="FullName" class="col-md-4 col-form-label col-form-label-sm"></label>
+                                <div class="col-md-8">
+                                    <input asp-for="FullName" class="form-control form-control-sm" />
+                                    <span asp-validation-for="FullName" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row mb-3 align-items-center">
+                                <label asp-for="EmployeeOfficialID" class="col-md-4 col-form-label col-form-label-sm"></label>
+                                <div class="col-md-8">
+                                    <!-- Set default value to "-" -->
+                                    <input asp-for="EmployeeOfficialID" class="form-control form-control-sm" value="-" />
+                                </div>
+                            </div>
+                            <div class="row mb-3 align-items-center">
+                                <label asp-for="JobTitle" class="col-md-4 col-form-label col-form-label-sm"></label>
+                                <div class="col-md-8">
+                                    <select asp-for="JobTitle" asp-items="ViewBag.JobTitles" class="form-select form-select-sm">
+                                        <option value="">-- Select Job Title --</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mb-3 align-items-center">
+                                <label asp-for="Department" class="col-md-4 col-form-label col-form-label-sm"></label>
+                                <div class="col-md-8">
+                                    <select asp-for="Department" asp-items="ViewBag.Departments" class="form-select form-select-sm">
+                                        <option value="">-- Select Department --</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mb-3 align-items-center">
+                                <label asp-for="Gender" class="col-md-4 col-form-label col-form-label-sm"></label>
+                                <div class="col-md-8">
+                                    <select asp-for="Gender" class="form-select form-select-sm">
+                                        <option value="">-- Select Gender --</option>
+                                        <option value="Male">Male</option>
+                                        <option value="Female">Female</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mb-3 align-items-center">
+                                <label asp-for="HireDate" class="col-md-4 col-form-label col-form-label-sm"></label>
+                                <div class="col-md-8">
+                                    <input asp-for="HireDate" type="date" class="form-control form-control-sm" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right Column -->
+                        <div class="col-md-6">
+                            <h5 class="form-section-header">Contact & Location</h5>
+                            <div class="row mb-3 align-items-center">
+                                <label asp-for="Email" class="col-md-4 col-form-label col-form-label-sm"></label>
+                                <div class="col-md-8">
+                                    <input asp-for="Email" class="form-control form-control-sm" />
+                                </div>
+                            </div>
+                            <div class="row mb-3 align-items-center">
+                                <label asp-for="PhoneNumber" class="col-md-4 col-form-label col-form-label-sm"></label>
+                                <div class="col-md-8">
+                                    <input asp-for="PhoneNumber" class="form-control form-control-sm" />
+                                </div>
+                            </div>
+                            <div class="row mb-3 align-items-center">
+                                <label asp-for="EmergencyContactPhone" class="col-md-4 col-form-label col-form-label-sm"></label>
+                                <div class="col-md-8">
+                                    <input asp-for="EmergencyContactPhone" class="form-control form-control-sm" />
+                                </div>
+                            </div>
+                            <div class="row mb-3 align-items-center">
+                                <label asp-for="Location" class="col-md-4 col-form-label col-form-label-sm"></label>
+                                <div class="col-md-8">
+                                    <input asp-for="Location" class="form-control form-control-sm" />
+                                </div>
+                            </div>
+                            <div class="row mb-3 align-items-center">
+                                <label asp-for="Address" class="col-md-4 col-form-label col-form-label-sm"></label>
+                                <div class="col-md-8">
+                                    <textarea asp-for="Address" class="form-control form-control-sm" rows="2"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h5 class="form-section-header">User Account Details</h5>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="row mb-3 align-items-center">
+                                <label asp-for="Username" class="col-md-4 col-form-label col-form-label-sm"></label>
+                                <div class="col-md-8">
+                                    <input asp-for="Username" class="form-control form-control-sm" />
+                                    <span asp-validation-for="Username" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row mb-3 align-items-center">
+                                <label asp-for="RoleName" class="col-md-4 col-form-label col-form-label-sm"></label>
+                                <div class="col-md-8">
+                                    <select asp-for="RoleName" asp-items="ViewBag.Roles" class="form-select form-select-sm">
+                                        <option value="">-- Select Role --</option>
+                                    </select>
+                                    <span asp-validation-for="RoleName" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="row mb-3 align-items-center">
+                                <label asp-for="Password" class="col-md-4 col-form-label col-form-label-sm"></label>
+                                <div class="col-md-8">
+                                    <input asp-for="Password" class="form-control form-control-sm" />
+                                    <span asp-validation-for="Password" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-8 offset-md-4">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" asp-for="IsActive" />
+                                        <label class="form-check-label" asp-for="IsActive"></label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 border-top pt-3 btn-group-custom">
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-plus-circle me-2"></i>Create Employee</button>
+                        <button type="button" id="resetBtn" class="btn btn-warning"><i class="fas fa-undo me-2"></i>Reset Form</button>
+                        <a asp-action="Index" class="btn btn-secondary"><i class="fas fa-arrow-left me-2"></i>Back to List</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Confirmation Modal -->
+<div id="resetConfirmModal" class="modal-custom">
+    <div class="modal-header-custom">
+        <h5 class="modal-title">Confirm Reset</h5>
+    </div>
+    <div class="modal-body-custom">
+        <p>Are you sure you want to clear the form?</p>
+    </div>
+    <div class="modal-footer-custom">
+        <button type="button" class="btn btn-secondary" id="cancelResetBtn">Cancel</button>
+        <button type="button" class="btn btn-danger" id="confirmResetBtn">Yes, Reset</button>
+    </div>
+</div>
+<div id="modalBackdrop" class="modal-backdrop"></div>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const resetBtn = document.getElementById('resetBtn');
+            const modal = document.getElementById('resetConfirmModal');
+            const backdrop = document.getElementById('modalBackdrop');
+            const confirmResetBtn = document.getElementById('confirmResetBtn');
+            const cancelResetBtn = document.getElementById('cancelResetBtn');
+
+            function showModal() {
+                modal.style.display = 'block';
+                backdrop.style.display = 'block';
+            }
+
+            function hideModal() {
+                modal.style.display = 'none';
+                backdrop.style.display = 'none';
+            }
+
+            if (resetBtn) {
+                resetBtn.addEventListener('click', function () {
+                    // Instead of confirm(), show the modal
+                    showModal();
+                });
+            }
+
+            if (cancelResetBtn) {
+                cancelResetBtn.addEventListener('click', hideModal);
+            }
+
+            if (backdrop) {
+                backdrop.addEventListener('click', hideModal);
+            }
+
+            if (confirmResetBtn) {
+                confirmResetBtn.addEventListener('click', function () {
+                    const form = document.getElementById('createEmployeeForm');
+                    form.reset();
+
+                    // Also clear validation messages if any
+                    const validationSpans = form.querySelectorAll('.text-danger span');
+                    validationSpans.forEach(span => span.textContent = '');
+
+                    const validationSummary = form.querySelector('.validation-summary-errors');
+                    if (validationSummary) {
+                        validationSummary.innerHTML = '<ul></ul>';
+                    }
+
+                    // Set the default value for EmployeeOfficialID back to "-"
+                    const officialIdInput = document.getElementById('EmployeeOfficialID');
+                    if(officialIdInput) {
+                        officialIdInput.value = '-';
+                    }
+
+                    hideModal();
+                });
+            }
+        });
+    </script>
+}

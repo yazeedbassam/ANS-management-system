@@ -1,0 +1,191 @@
+/* Updated styles for fixed side menu and interactive panels */
+
+/* --- Fixed Side Menu --- */
+.fixed-side-menu {
+    position: fixed;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    z-index: 900; /* Below panels but above most content */
+}
+
+.side-menu-item {
+    background-color: rgba(0, 123, 255, 0.8);
+    color: var(--white-color);
+    width: 180px;
+    padding: var(--space-md);
+    border-radius: var(--border-radius-md);
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    transition: var(--transition-medium);
+    box-shadow: var(--shadow-md);
+}
+
+.side-menu-item:hover, 
+.side-menu-item:focus {
+    background-color: var(--primary-dark);
+    transform: translateX(-5px);
+    outline: none; /* Remove default focus outline */
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.4), var(--shadow-md); /* Custom focus indicator */
+}
+
+.side-menu-item i {
+    font-size: 1.5rem;
+    margin-right: var(--space-md);
+    width: 24px; /* Fixed width for alignment */
+    text-align: center;
+}
+
+.side-menu-item span {
+    font-weight: 500;
+    flex-grow: 1; /* Allow text to take remaining space */
+}
+
+/* --- Info Panels Container --- */
+.info-panels-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 35%;
+    height: 100%;
+    z-index: 1000; /* High z-index */
+    pointer-events: none; /* Allow clicks through unless overlay is active */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity var(--transition-medium), visibility var(--transition-medium);
+}
+
+.info-panels-container.active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto; /* Enable pointer events when active */
+}
+
+.panel-overlay {
+    position: absolute; /* Position within the container */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+}
+
+/* --- Individual Info Panels --- */
+.info-panel {
+    position: absolute; /* Position within the container */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: var(--white-color);
+    padding: 0; /* Padding handled by header/content */
+    border-radius: var(--border-radius-md);
+    box-shadow: var(--shadow-lg);
+    width: 90%;
+    max-width: 600px;
+    max-height: 80vh;
+    overflow: hidden; /* Changed from overflow-y: auto */
+    display: none; /* Hide inactive panels */
+}
+
+.info-panels-container.active .info-panel.active {
+    display: block; /* Show the active panel */
+}
+
+.panel-header {
+    background-color: var(--primary-color);
+    color: var(--white-color);
+    padding: var(--space-md) var(--space-lg);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.panel-header h3 {
+    margin: 0;
+    font-size: 1.5rem;
+    color: var(--white-color); /* Ensure color overrides base */
+}
+
+.close-panel {
+    background: none;
+    border: none;
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: var(--white-color);
+    cursor: pointer;
+    line-height: 1;
+    padding: 0 var(--space-sm);
+    opacity: 0.8;
+    transition: opacity var(--transition-fast);
+}
+
+.close-panel:hover,
+.close-panel:focus {
+    opacity: 1;
+    outline: none; /* Remove default focus outline */
+}
+
+.panel-content {
+    padding: var(--space-lg);
+    max-height: calc(80vh - 100px); /* Adjust based on header height */
+    overflow-y: auto;
+}
+
+.panel-content h4 {
+    color: var(--primary-color);
+    margin-top: var(--space-lg);
+    margin-bottom: var(--space-sm);
+    font-size: 1.2rem;
+}
+
+.panel-content ul {
+    margin-bottom: var(--space-md);
+    padding-left: var(--space-lg);
+}
+
+.panel-content li {
+    margin-bottom: var(--space-sm);
+}
+
+.panel-content .contact-info {
+    margin-bottom: var(--space-lg);
+}
+
+/* --- Contact Form Feedback --- */
+#contact-feedback {
+    margin-top: var(--space-md);
+    padding: var(--space-sm);
+    border-radius: var(--border-radius-sm);
+    text-align: center;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+/* --- Realistic ATC Image Container --- */
+.atc-realistic-image-container {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    width: 300px;
+    height: auto;
+    z-index: 6;
+    border-radius: var(--border-radius-md);
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+    transition: transform 0.3s ease;
+}
+
+.atc-realistic-image-container:hover {
+    transform: scale(1.05);
+}
+
+.atc-realistic-image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}

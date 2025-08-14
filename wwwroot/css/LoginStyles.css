@@ -1,0 +1,144 @@
+﻿/* Import Google Font - Inter for a clean, modern look */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* General body styling */
+body {
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(135deg, #e0f2f7 0%, #cce7f0 100%); /* Soft sky blue gradient */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 20px; /* Add some padding for smaller screens */
+    box-sizing: border-box; /* Include padding in element's total width and height */
+}
+
+/* Login card container */
+.login-card {
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 12px; /* More rounded corners */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* Softer, larger shadow */
+    width: 100%;
+    max-width: 450px; /* Max width for larger screens */
+    text-align: center;
+    box-sizing: border-box;
+    border: 1px solid #e0e0e0; /* Subtle border */
+}
+
+/* Header styling */
+.login-header {
+    margin-bottom: 30px;
+    color: #2c3e50; /* Darker blue for text */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px; /* Space between icon and text */
+}
+
+    .login-header i {
+        font-size: 3.5rem; /* Larger icon */
+        color: #007bff; /* Bright blue for the icon */
+        animation: flyIn 1s ease-out forwards; /* Simple animation for the icon */
+        transform: translateX(-100px); /* Start off-screen */
+        opacity: 0;
+    }
+
+    .login-header h2 {
+        font-size: 2.2rem; /* Larger, more prominent title */
+        font-weight: 600;
+        margin: 0;
+    }
+
+/* Form group styling */
+.login-form .form-group {
+    margin-bottom: 25px; /* More vertical spacing between form groups */
+    text-align: left; /* Align labels and inputs to the left */
+}
+
+.login-form label {
+    display: block;
+    margin-bottom: 8px;
+    color: #555;
+    font-weight: 500; /* Slightly bolder labels */
+    font-size: 1.05rem;
+}
+
+/* Input field styling */
+.login-form .form-control {
+    width: 100%;
+    padding: 14px 18px; /* More padding for better touch targets */
+    border: 1px solid #c0d9e6; /* Softer border color */
+    border-radius: 8px; /* More rounded inputs */
+    box-sizing: border-box;
+    font-size: 1.1rem;
+    color: #333;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+    .login-form .form-control:focus {
+        border-color: #007bff; /* Highlight on focus */
+        box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25); /* Subtle blue glow */
+        outline: none;
+    }
+
+/* Validation message styling */
+.login-form .text-danger {
+    color: #e74c3c; /* A clear, but not harsh, red */
+    font-size: 0.9em;
+    margin-top: 6px;
+    display: block; /* Ensure it takes its own line */
+}
+
+/* Submit button styling */
+.login-form .btn-submit {
+    background: linear-gradient(45deg, #007bff, #0056b3); /* Gradient blue for the button */
+    color: white;
+    padding: 15px 25px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.2rem;
+    font-weight: 600;
+    width: 100%; /* Full width button */
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3); /* Button shadow */
+    letter-spacing: 0.5px;
+}
+
+    .login-form .btn-submit:hover {
+        background: linear-gradient(45deg, #0056b3, #003f7f); /* Darker gradient on hover */
+        box-shadow: 0 6px 20px rgba(0, 123, 255, 0.4);
+        transform: translateY(-2px); /* Slight lift on hover */
+    }
+
+/* Keyframe animation for the airplane icon */
+@keyframes flyIn {
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 600px) {
+    .login-card {
+        padding: 25px;
+        margin: 15px;
+    }
+
+    .login-header h2 {
+        font-size: 1.8rem;
+    }
+
+    .login-header i {
+        font-size: 3rem;
+    }
+
+    .login-form .form-control,
+    .login-form .btn-submit {
+        font-size: 1rem;
+        padding: 12px 15px;
+    }
+}
