@@ -40,15 +40,24 @@ builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
-// 2) Seed Admin user
-using (var scope = app.Services.CreateScope())
+// 2) Seed Admin user - فقط في بيئة التطوير
+if (app.Environment.IsDevelopment())
 {
-    //var db = scope.ServiceProvider.GetRequiredService<OracleDb>();
-    var db = scope.ServiceProvider.GetRequiredService<SqlServerDb>();
-
-    if (db.GetUserByUsername("admin") == null)
+    using (var scope = app.Services.CreateScope())
     {
-        db.CreateUser("admin", "123", "Admin");
+        try
+        {
+            var db = scope.ServiceProvider.GetRequiredService<SqlServerDb>();
+            if (db.GetUserByUsername("admin") == null)
+            {
+                db.CreateUser("admin", "123", "Admin");
+            }
+        }
+        catch (Exception ex)
+        {
+            // تسجيل الخطأ ولكن لا توقف التطبيق
+            Console.WriteLine($"Warning: Could not seed admin user: {ex.Message}");
+        }
     }
 }
 

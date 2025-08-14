@@ -10,7 +10,6 @@ using WebApplication1.Models;
 
 namespace WebApplication1.Controllers
 {
-    [Authorize]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -24,9 +23,16 @@ namespace WebApplication1.Controllers
             _webHostEnvironment = webHostEnvironment;
         }
 
+        [AllowAnonymous]
         public IActionResult Index()
         {
             return View();
+        }
+
+        [AllowAnonymous]
+        public IActionResult Health()
+        {
+            return Ok(new { status = "healthy", timestamp = DateTime.UtcNow });
         }
 
         public IActionResult Privacy()
