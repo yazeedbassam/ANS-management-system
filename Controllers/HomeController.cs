@@ -35,6 +35,12 @@ namespace WebApplication1.Controllers
             return Ok(new { status = "healthy", timestamp = DateTime.UtcNow });
         }
 
+        [AllowAnonymous]
+        public IActionResult Welcome()
+        {
+            return Content("ANS Management System is running successfully!", "text/plain");
+        }
+
         public IActionResult Privacy()
         {
             return View();
