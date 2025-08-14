@@ -53,6 +53,8 @@
     <PackageReference Include="Microsoft.IdentityModel.Logging" Version="8.12.1" />
     <PackageReference Include="Microsoft.Owin" Version="4.2.2" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Npgsql" Version="8.0.2" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.2" />
     <!--<PackageReference Include="Oracle.ManagedDataAccess" Version="23.8.0" />
     <PackageReference Include="Oracle.ManagedDataAccess.Core" Version="23.8.0" />-->
     <PackageReference Include="QuestPDF" Version="2025.5.1" />

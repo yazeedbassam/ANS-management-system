@@ -15,13 +15,13 @@
 ## 🛠️ التقنيات المستخدمة
 
 - **ASP.NET Core 8.0**
-- **SQL Server**
+- **PostgreSQL** (للنشر على Railway)
 - **Entity Framework Core**
 - **Bootstrap 5**
 - **Font Awesome**
 - **jQuery**
 
-## 📦 النشر على Railway
+## 📦 النشر على Railway (مجاني)
 
 ### الخطوة 1: إعداد GitHub
 ```bash
@@ -29,45 +29,52 @@ git init
 git add .
 git commit -m "Initial commit"
 git branch -M main
-git remote add origin https://github.com/username/repository-name.git
+git remote add origin https://github.com/username/atc-management-system.git
 git push -u origin main
 ```
 
-### الخطوة 2: إعداد Railway
-1. اذهب إلى [Railway.app](https://railway.app)
-2. سجل دخول بحساب GitHub
-3. انقر على "New Project"
-4. اختر "Deploy from GitHub repo"
-5. اختر المستودع الخاص بك
+### الخطوة 2: إنشاء مستودع GitHub
+1. اذهب إلى [GitHub.com](https://github.com)
+2. انقر على "New repository"
+3. اسم المستودع: `atc-management-system`
+4. اختر Public
+5. انقر "Create repository"
 
-### الخطوة 3: إعداد قاعدة البيانات
+### الخطوة 3: إعداد Railway
+1. اذهب إلى [Railway.app](https://railway.app)
+2. انقر على "Start a New Project"
+3. اختر "Deploy from GitHub repo"
+4. اختر المستودع الخاص بك
+5. انقر "Deploy Now"
+
+### الخطوة 4: إعداد قاعدة البيانات
 1. في Railway، انقر على "New"
 2. اختر "Database" → "PostgreSQL"
 3. انقر على قاعدة البيانات الجديدة
 4. انسخ Connection String
 
-### الخطوة 4: إعداد متغيرات البيئة
+### الخطوة 5: إعداد متغيرات البيئة
 في Railway، أضف المتغيرات التالية:
 
 ```
 DATABASE_URL=your_postgresql_connection_string
 SMTP_SERVER=smtp-relay.brevo.com
 SMTP_PORT=587
-SMTP_USERNAME=your_smtp_username
-SMTP_PASSWORD=your_smtp_password
-RECEIVER_EMAIL=your_email@example.com
+SMTP_USERNAME=8e2caf001@smtp-brevo.com
+SMTP_PASSWORD=3HzgVG7nwKMxqcA2
+RECEIVER_EMAIL=yazeedbassam1987@gmail.com
 ```
 
-### الخطوة 5: النشر
+### الخطوة 6: النشر
 1. Railway سيقوم تلقائياً بنشر التطبيق
-2. انتظر حتى يكتمل البناء
+2. انتظر حتى يكتمل البناء (قد يستغرق 5-10 دقائق)
 3. انقر على الرابط المولّد للوصول للتطبيق
 
 ## 🔧 التطوير المحلي
 
 ### المتطلبات
 - .NET 8.0 SDK
-- SQL Server
+- SQL Server (للتطوير المحلي)
 - Visual Studio 2022 أو VS Code
 
 ### التشغيل
@@ -79,7 +86,7 @@ dotnet run
 
 ## 📝 ملاحظات مهمة
 
-1. **قاعدة البيانات**: يجب تعديل الكود ليدعم PostgreSQL بدلاً من SQL Server
+1. **قاعدة البيانات**: المشروع يدعم PostgreSQL في الإنتاج و SQL Server في التطوير
 2. **الملفات**: تأكد من إعداد مسارات الملفات بشكل صحيح
 3. **الأمان**: تأكد من إعداد HTTPS في الإنتاج
 4. **النسخ الاحتياطي**: قم بإعداد نسخ احتياطي لقاعدة البيانات
@@ -87,7 +94,7 @@ dotnet run
 ## 🆘 الدعم
 
 للمساعدة أو الاستفسارات، يرجى التواصل عبر:
-- Email: your-email@example.com
+- Email: yazeedbassam1987@gmail.com
 - GitHub Issues: [رابط المستودع]
 
 ## 📄 الترخيص
