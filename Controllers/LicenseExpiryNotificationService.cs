@@ -45,12 +45,12 @@ namespace WebApplication1.Services // <== تم إضافة namespace هنا لت�
             _serviceProvider = serviceProvider;
 
             // قراءة إعدادات SMTP من التكوين (appsettings.json)
-            // استخدام ?? throw new ArgumentNullException لضمان وجود القيم
-            _smtpServer = configuration["SmtpSettings:Server"] ?? throw new ArgumentNullException("SMTP Server not found in appsettings.json");
-            _smtpPort = int.Parse(configuration["SmtpSettings:Port"] ?? throw new ArgumentNullException("SMTP Port not found in appsettings.json"));
-            _smtpUsername = configuration["SmtpSettings:Username"] ?? throw new ArgumentNullException("SMTP Username not found in appsettings.json");
-            _smtpPassword = configuration["SmtpSettings:Password"] ?? throw new ArgumentNullException("SMTP Password not found in appsettings.json");
-            _fromEmail = configuration["SmtpSettings:ReceiverEmail"] ?? throw new ArgumentNullException("SMTP ReceiverEmail (From Email) not found in appsettings.json");
+            // استخدام قيم افتراضية في حالة عدم وجود المتغيرات
+            _smtpServer = configuration["SmtpSettings:Server"] ?? "smtp-relay.brevo.com";
+            _smtpPort = int.TryParse(configuration["SmtpSettings:Port"], out int port) ? port : 587;
+            _smtpUsername = configuration["SmtpSettings:Username"] ?? "8e2caf001@smtp-brevo.com";
+            _smtpPassword = configuration["SmtpSettings:Password"] ?? "3HzgVG7nwKMxqcA2";
+            _fromEmail = configuration["SmtpSettings:ReceiverEmail"] ?? "yazeedbassam1987@gmail.com";
         }
 
         // هذه هي الدالة الأساسية التي يتم تشغيلها بشكل متكرر كخدمة خلفية

@@ -11,8 +11,14 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddSingleton<SqlServerDb>();
 builder.Services.AddSingleton<IPasswordHasher<ControllerUser>, PasswordHasher<ControllerUser>>();
-builder.Services.AddHostedService<LicenseExpiryNotificationService>();
-builder.Services.AddScoped<LicenseExpiryNotificationService>();
+
+// إضافة الخدمة فقط في بيئة التطوير أو إذا كانت متغيرات SMTP موجودة
+if (builder.Environment.IsDevelopment() || 
+    !string.IsNullOrEmpty(builder.Configuration["SmtpSettings:Server"]))
+{
+    builder.Services.AddHostedService<LicenseExpiryNotificationService>();
+    builder.Services.AddScoped<LicenseExpiryNotificationService>();
+}
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
