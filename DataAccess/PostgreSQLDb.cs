@@ -219,5 +219,67 @@ namespace WebApplication1.DataAccess
             }
             return certificates;
         }
+
+        // Additional methods needed by AccountController
+        public bool ValidateCredentials(string username, string password, out int userId, out string role)
+        {
+            var user = GetUserByUsername(username);
+            if (user == null)
+            {
+                userId = 0;
+                role = "";
+                return false;
+            }
+
+            var passwordHasher = new PasswordHasher<ControllerUser>();
+            var result = passwordHasher.VerifyHashedPassword(user, user.PasswordHash, password);
+            
+            if (result == PasswordVerificationResult.Success)
+            {
+                userId = user.Id;
+                role = user.Role;
+                return true;
+            }
+
+            userId = 0;
+            role = "";
+            return false;
+        }
+
+        public ProfileViewModel GetProfileDataByUsername(string username)
+        {
+            // Placeholder implementation
+            return new ProfileViewModel
+            {
+                Username = username,
+                FullName = "Admin User",
+                Email = "admin@example.com",
+                Role = "Admin"
+            };
+        }
+
+        public void UpdateControllerProfile(ControllerUser controller)
+        {
+            // Placeholder implementation
+            Console.WriteLine($"Updating controller profile for {controller.FullName}");
+        }
+
+        public void UpdateEmployeeProfile(Employee employee)
+        {
+            // Placeholder implementation
+            Console.WriteLine($"Updating employee profile for {employee.FullName}");
+        }
+
+        public void UpdateUserPassword(string username, string newPassword)
+        {
+            var passwordHasher = new PasswordHasher<ControllerUser>();
+            var user = new ControllerUser { Username = username };
+            var hashedPassword = passwordHasher.HashPassword(user, newPassword);
+
+            var sql = "UPDATE controllerusers SET passwordhash = @passwordhash WHERE username = @username";
+            ExecuteNonQuery(sql, 
+                new NpgsqlParameter("@passwordhash", hashedPassword),
+                new NpgsqlParameter("@username", username));
+        }
     }
 } 

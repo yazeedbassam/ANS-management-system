@@ -1,17 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using WebApplication1.DataAccess; // تأكد من هذا الـ namespace
+using WebApplication1.DataAccess;
 using System.Security.Claims;
-//using Oracle.ManagedDataAccess.Client;
 using System.Data;
-using Microsoft.Data.SqlClient; // تأكد من وجود هذا الـ namespace
-using System.Data;             // مطلوب لـ DataTable
-using WebApplication1.DataAccess; // تأكد أن SqlServerDb أو SqlDb هنا
-using System;                  // مطلوب لـ Convert.ToInt32
-using Microsoft.AspNetCore.Mvc; // مطلوب لـ IViewComponentResult و View
-using System.Security.Claims; // مطلوب لـ ClaimTypes
-using WebApplication1.DataAccess; // تأكد من أنك تستخدم SqlDb هنا
-using Microsoft.Data.SqlClient; // تأكد من استخدام هذا الـ namespace
-using System.Data;             // مطلوب لـ DataTable
+using System;
+using Npgsql;
 
 public class NotificationCountViewComponent : ViewComponent
 {
@@ -40,18 +32,14 @@ public class NotificationCountViewComponent : ViewComponent
 
         int notificationCount = 0; // تهيئة عدد الإشعارات
 
-        // استخدام SqlConnection و SqlCommand و SqlParameter
-        // نفترض أن _db.GetConnection() ترجع SqlConnection
+        // استخدام PostgreSQL connection
         using (var connection = _db.GetConnection())
         {
             connection.Open();
-            // تم تعديل SQL: :userId إلى @userId
-            using (var cmd = new SqlCommand("SELECT COUNT(*) FROM notifications WHERE userid = @userId AND is_read = 0", connection))
+            using (var cmd = new NpgsqlCommand("SELECT COUNT(*) FROM notifications WHERE userid = @userId AND is_read = false", connection))
             {
-                // تعريف المعامل باستخدام Microsoft.Data.SqlClient.SqlParameter
-                cmd.Parameters.Add(new Microsoft.Data.SqlClient.SqlParameter("@userId", SqlDbType.Int) { Value = userId }); // <== تم التعديل
+                cmd.Parameters.Add(new NpgsqlParameter("@userId", userId));
 
-                // استخدام ExecuteScalar لجلب قيمة واحدة (COUNT(*)) بكفاءة أكبر
                 object result = cmd.ExecuteScalar();
 
                 if (result != DBNull.Value && result != null)
