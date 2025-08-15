@@ -12,9 +12,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddSingleton<SqlServerDb>();
 builder.Services.AddSingleton<IPasswordHasher<ControllerUser>, PasswordHasher<ControllerUser>>();
 
-// إضافة الخدمة فقط في بيئة التطوير أو إذا كانت متغيرات SMTP موجودة
-if (builder.Environment.IsDevelopment() || 
-    !string.IsNullOrEmpty(builder.Configuration["SmtpSettings:Server"]))
+// إضافة الخدمة فقط في بيئة التطوير أو إذا كانت متغيرات SMTP موجودة ومُعرّفة بشكل صحيح
+var smtpServer = builder.Configuration["SmtpSettings:Server"];
+var isSmtpConfigured = !string.IsNullOrEmpty(smtpServer) && !smtpServer.StartsWith("${");
+
+if (builder.Environment.IsDevelopment() || isSmtpConfigured)
 {
     builder.Services.AddHostedService<LicenseExpiryNotificationService>();
     builder.Services.AddScoped<LicenseExpiryNotificationService>();

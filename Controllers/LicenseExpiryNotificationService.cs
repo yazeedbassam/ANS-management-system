@@ -47,10 +47,31 @@ namespace WebApplication1.Services // <== تم إضافة namespace هنا لت�
             // قراءة إعدادات SMTP من التكوين (appsettings.json)
             // استخدام قيم افتراضية في حالة عدم وجود المتغيرات
             _smtpServer = configuration["SmtpSettings:Server"] ?? "smtp-relay.brevo.com";
-            _smtpPort = int.TryParse(configuration["SmtpSettings:Port"], out int port) ? port : 587;
-            _smtpUsername = configuration["SmtpSettings:Username"] ?? "8e2caf001@smtp-brevo.com";
-            _smtpPassword = configuration["SmtpSettings:Password"] ?? "3HzgVG7nwKMxqcA2";
-            _fromEmail = configuration["SmtpSettings:ReceiverEmail"] ?? "yazeedbassam1987@gmail.com";
+            
+            // تحسين معالجة SMTP_PORT لتجنب أخطاء التنسيق
+            var smtpPortValue = configuration["SmtpSettings:Port"];
+            if (string.IsNullOrEmpty(smtpPortValue) || smtpPortValue.StartsWith("${") || !int.TryParse(smtpPortValue, out int port))
+            {
+                _smtpPort = 587; // القيمة الافتراضية
+                _logger.LogWarning("SMTP Port not configured properly, using default value: 587");
+            }
+            else
+            {
+                _smtpPort = port;
+            }
+            
+            // تحسين معالجة باقي إعدادات SMTP
+            var smtpUsername = configuration["SmtpSettings:Username"];
+            _smtpUsername = string.IsNullOrEmpty(smtpUsername) || smtpUsername.StartsWith("${") 
+                ? "8e2caf001@smtp-brevo.com" : smtpUsername;
+                
+            var smtpPassword = configuration["SmtpSettings:Password"];
+            _smtpPassword = string.IsNullOrEmpty(smtpPassword) || smtpPassword.StartsWith("${") 
+                ? "3HzgVG7nwKMxqcA2" : smtpPassword;
+                
+            var receiverEmail = configuration["SmtpSettings:ReceiverEmail"];
+            _fromEmail = string.IsNullOrEmpty(receiverEmail) || receiverEmail.StartsWith("${") 
+                ? "yazeedbassam1987@gmail.com" : receiverEmail;
         }
 
         // هذه هي الدالة الأساسية التي يتم تشغيلها بشكل متكرر كخدمة خلفية
