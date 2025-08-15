@@ -37,6 +37,13 @@ namespace WebApplication1.DataAccess // Assuming this namespace remains the same
             _passwordHasher = passwordHasher;
             _logger = logger;
         }
+
+        // Constructor جديد لقبول connection string مباشرة
+        public SqlServerDb(string connectionString)
+        {
+            _connectionString = connectionString ?? throw new ArgumentNullException("Connection string cannot be null.");
+            Console.WriteLine($"SqlServerDb initialized with connection string: {connectionString}");
+        }
         // Return SqlConnection instead of OracleConnection
 
         public SqlConnection GetConnection()

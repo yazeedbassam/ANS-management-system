@@ -9,7 +9,18 @@ using WebApplication1.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddSingleton<SqlServerDb>();
+// إضافة خدمات قاعدة البيانات مع دعم متغيرات البيئة
+builder.Services.AddSingleton<SqlServerDb>(provider =>
+{
+    // استخدام متغير البيئة مباشرة
+    var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL") 
+        ?? builder.Configuration.GetConnectionString("DefaultConnection");
+    
+    // طباعة للتحقق
+    Console.WriteLine($"Using connection string: {connectionString}");
+    
+    return new SqlServerDb(connectionString);
+});
 builder.Services.AddSingleton<IPasswordHasher<ControllerUser>, PasswordHasher<ControllerUser>>();
 
 // إضافة الخدمة فقط في بيئة التطوير
@@ -56,12 +67,18 @@ if (app.Environment.IsDevelopment())
             if (db.GetUserByUsername("admin") == null)
             {
                 db.CreateUser("admin", "123", "Admin");
+                Console.WriteLine("Admin user created successfully");
+            }
+            else
+            {
+                Console.WriteLine("Admin user already exists");
             }
         }
         catch (Exception ex)
         {
             // تسجيل الخطأ ولكن لا توقف التطبيق
             Console.WriteLine($"Warning: Could not seed admin user: {ex.Message}");
+            Console.WriteLine($"Connection string used: {Environment.GetEnvironmentVariable("DATABASE_URL")}");
         }
     }
 }
