@@ -82,8 +82,8 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
-// إضافة route للصفحة الرئيسية بدون مصادقة
-app.MapGet("/", () => "ANS Management System is running successfully!");
+// إضافة route للصفحة الرئيسية بدون مصادقة - بسيط جداً
+app.MapGet("/", () => "OK");
 
 app.Run();
 
