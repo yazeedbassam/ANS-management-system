@@ -15,14 +15,14 @@ using static System.Formats.Asn1.AsnWriter;
 
 public class AccountController : Controller
 {
-    private readonly SqlServerDb _db;
+    private readonly PostgreSQLDb _db;
     private readonly string _brevoSmtpServer = "smtp-relay.brevo.com";
     private readonly int _brevoSmtpPort = 587;
     private readonly string _brevoLogin = "8e2caf001@smtp-brevo.com";
     private readonly string _brevoPassword = "3HzgVG7nwKMxqcA2";
     private readonly string _fromEmail = "yazeedbassam1987@gmail.com";
 
-    public AccountController(SqlServerDb db) => _db = db;
+    public AccountController(PostgreSQLDb db) => _db = db;
 
     public IActionResult Notifications()
     {

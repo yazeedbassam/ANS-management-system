@@ -15,9 +15,9 @@ using System.Data;             // مطلوب لـ DataTable
 
 public class NotificationCountViewComponent : ViewComponent
 {
-    private readonly SqlServerDb _db;
+    private readonly PostgreSQLDb _db;
 
-    public NotificationCountViewComponent(SqlServerDb db)
+    public NotificationCountViewComponent(PostgreSQLDb db)
     {
         _db = db;
     }

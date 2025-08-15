@@ -10,15 +10,23 @@ using WebApplication1.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 // إضافة خدمات قاعدة البيانات مع دعم متغيرات البيئة
-builder.Services.AddSingleton<SqlServerDb>(provider =>
+builder.Services.AddSingleton<PostgreSQLDb>(provider =>
 {
     // استخدام متغير البيئة مباشرة
     var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL") 
         ?? builder.Configuration.GetConnectionString("DefaultConnection");
     
     // طباعة للتحقق
-    Console.WriteLine($"Using connection string: {connectionString}");
+    Console.WriteLine($"Using PostgreSQL connection string: {connectionString}");
     
+    return new PostgreSQLDb(connectionString);
+});
+
+// إضافة SqlServerDb للتوافق مع الكود الموجود
+builder.Services.AddSingleton<SqlServerDb>(provider =>
+{
+    var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL") 
+        ?? builder.Configuration.GetConnectionString("DefaultConnection");
     return new SqlServerDb(connectionString);
 });
 builder.Services.AddSingleton<IPasswordHasher<ControllerUser>, PasswordHasher<ControllerUser>>();
@@ -63,15 +71,15 @@ if (app.Environment.IsDevelopment())
     {
         try
         {
-            var db = scope.ServiceProvider.GetRequiredService<SqlServerDb>();
+            var db = scope.ServiceProvider.GetRequiredService<PostgreSQLDb>();
             if (db.GetUserByUsername("admin") == null)
             {
                 db.CreateUser("admin", "123", "Admin");
-                Console.WriteLine("Admin user created successfully");
+                Console.WriteLine("Admin user created successfully in PostgreSQL");
             }
             else
             {
-                Console.WriteLine("Admin user already exists");
+                Console.WriteLine("Admin user already exists in PostgreSQL");
             }
         }
         catch (Exception ex)
