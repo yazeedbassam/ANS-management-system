@@ -102,9 +102,9 @@ namespace WebApplication1.DataAccess
                 var row = dt.Rows[0];
                 return new ControllerUser
                 {
-                    Id = Convert.ToInt32(row["id"]),
+                    ControllerId = Convert.ToInt32(row["id"]),
                     Username = row["username"].ToString(),
-                    PasswordHash = row["passwordhash"].ToString(),
+                    Password = row["passwordhash"].ToString(),
                     Role = row["role"].ToString()
                 };
             }
@@ -130,7 +130,7 @@ namespace WebApplication1.DataAccess
             if (user == null) return false;
 
             var passwordHasher = new PasswordHasher<ControllerUser>();
-            var result = passwordHasher.VerifyHashedPassword(user, user.PasswordHash, password);
+            var result = passwordHasher.VerifyHashedPassword(user, user.Password, password);
             return result == PasswordVerificationResult.Success;
         }
 
@@ -145,15 +145,14 @@ namespace WebApplication1.DataAccess
             {
                 employees.Add(new Employee
                 {
-                    Id = Convert.ToInt32(row["employeeid"]),
+                    EmployeeID = Convert.ToInt32(row["employeeid"]),
                     FullName = row["fullname"].ToString(),
                     JobTitle = row["job_title"].ToString(),
                     Email = row["email"].ToString(),
                     PhoneNumber = row["phone_number"].ToString(),
                     HireDate = row["hire_date"] != DBNull.Value ? Convert.ToDateTime(row["hire_date"]) : null,
                     EmploymentStatus = row["employment_status"].ToString(),
-                    CurrentDepartment = row["current_department"].ToString(),
-                    Role = row["role"].ToString()
+                    CurrentDepartment = row["current_department"].ToString()
                 });
             }
             return employees;
@@ -170,7 +169,7 @@ namespace WebApplication1.DataAccess
             {
                 projects.Add(new Project
                 {
-                    Id = Convert.ToInt32(row["projectid"]),
+                    ProjectId = Convert.ToInt32(row["projectid"]),
                     ProjectName = row["projectname"].ToString(),
                     Description = row["description"].ToString(),
                     StartDate = row["startdate"] != DBNull.Value ? Convert.ToDateTime(row["startdate"]) : null,
@@ -193,7 +192,7 @@ namespace WebApplication1.DataAccess
             {
                 licenses.Add(new License
                 {
-                    Id = Convert.ToInt32(row["licenseid"]),
+                    LicenseId = Convert.ToInt32(row["licenseid"]),
                     LicenseName = row["licensename"].ToString(),
                     LicenseNumber = row["licensenumber"].ToString(),
                     IssueDate = row["issuedate"] != DBNull.Value ? Convert.ToDateTime(row["issuedate"]) : null,
@@ -216,13 +215,12 @@ namespace WebApplication1.DataAccess
             {
                 certificates.Add(new Certificate
                 {
-                    Id = Convert.ToInt32(row["certificateid"]),
-                    CertificateName = row["certificatename"].ToString(),
-                    CertificateNumber = row["certificatenumber"].ToString(),
+                    CertificateId = Convert.ToInt32(row["certificateid"]),
+                    CertificateTitle = row["certificatename"].ToString(),
                     IssueDate = row["issuedate"] != DBNull.Value ? Convert.ToDateTime(row["issuedate"]) : null,
                     ExpiryDate = row["expirydate"] != DBNull.Value ? Convert.ToDateTime(row["expirydate"]) : null,
                     Status = row["status"].ToString(),
-                    EmployeeId = row["employeeid"] != DBNull.Value ? Convert.ToInt32(row["employeeid"]) : null
+                    ControllerId = row["employeeid"] != DBNull.Value ? Convert.ToInt32(row["employeeid"]) : 0
                 });
             }
             return certificates;
@@ -240,11 +238,11 @@ namespace WebApplication1.DataAccess
             }
 
             var passwordHasher = new PasswordHasher<ControllerUser>();
-            var result = passwordHasher.VerifyHashedPassword(user, user.PasswordHash, password);
+            var result = passwordHasher.VerifyHashedPassword(user, user.Password, password);
             
             if (result == PasswordVerificationResult.Success)
             {
-                userId = user.Id;
+                userId = user.ControllerId;
                 role = user.Role;
                 return true;
             }
@@ -262,7 +260,7 @@ namespace WebApplication1.DataAccess
                 Username = username,
                 FullName = "Admin User",
                 Email = "admin@example.com",
-                Role = "Admin"
+                UserType = "Controller"
             };
         }
 
