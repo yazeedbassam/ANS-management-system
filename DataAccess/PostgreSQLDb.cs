@@ -151,8 +151,8 @@ namespace WebApplication1.DataAccess
                     Email = row["email"].ToString(),
                     PhoneNumber = row["phone_number"].ToString(),
                     HireDate = row["hire_date"] != DBNull.Value ? Convert.ToDateTime(row["hire_date"]) : null,
-                    EmploymentStatus = row["employment_status"].ToString(),
-                    CurrentDepartment = row["current_department"].ToString()
+                    Department = row["current_department"].ToString(),
+                    Status = row["employment_status"].ToString()
                 });
             }
             return employees;
@@ -174,8 +174,7 @@ namespace WebApplication1.DataAccess
                     Description = row["description"].ToString(),
                     StartDate = row["startdate"] != DBNull.Value ? Convert.ToDateTime(row["startdate"]) : null,
                     EndDate = row["enddate"] != DBNull.Value ? Convert.ToDateTime(row["enddate"]) : null,
-                    Status = row["status"].ToString(),
-                    CreatedDate = row["createddate"] != DBNull.Value ? Convert.ToDateTime(row["createddate"]) : null
+                    Status = row["status"].ToString()
                 });
             }
             return projects;
@@ -193,8 +192,8 @@ namespace WebApplication1.DataAccess
                 licenses.Add(new License
                 {
                     LicenseId = Convert.ToInt32(row["licenseid"]),
-                    LicenseName = row["licensename"].ToString(),
-                    LicenseNumber = row["licensenumber"].ToString(),
+                    LicenseType = row["licensename"].ToString(),
+                    licensenumber = row["licensenumber"].ToString(),
                     IssueDate = row["issuedate"] != DBNull.Value ? Convert.ToDateTime(row["issuedate"]) : null,
                     ExpiryDate = row["expirydate"] != DBNull.Value ? Convert.ToDateTime(row["expirydate"]) : null,
                     Status = row["status"].ToString(),

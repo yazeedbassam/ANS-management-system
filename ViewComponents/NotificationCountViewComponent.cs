@@ -22,7 +22,7 @@ public class NotificationCountViewComponent : ViewComponent
             return View((object)0); // إرجاع 0 إذا لم يكن المستخدم مصادقًا
         }
 
-        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+        var userIdClaim = ((System.Security.Claims.ClaimsPrincipal)User).FindFirst(ClaimTypes.NameIdentifier);
 
         if (userIdClaim == null || !int.TryParse(userIdClaim.Value, out int userId))
         {
