@@ -85,5 +85,8 @@ app.MapControllerRoute(
 // إضافة route للصفحة الرئيسية بدون مصادقة - بسيط جداً
 app.MapGet("/", () => "OK");
 
+// إضافة route للـ health check
+app.MapGet("/health", () => "OK");
+
 app.Run();
 
