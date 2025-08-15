@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Npgsql;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -31,6 +32,13 @@ namespace WebApplication1.DataAccess
                                 ?? throw new ArgumentNullException("Connection string 'DefaultConnection' not found.");
             _passwordHasher = passwordHasher;
             _logger = logger;
+        }
+
+        // Constructor for dependency injection without logger
+        public PostgreSQLDb(IConfiguration configuration)
+        {
+            _connectionString = configuration.GetConnectionString("DefaultConnection")
+                                ?? throw new ArgumentNullException("Connection string 'DefaultConnection' not found.");
         }
 
         public NpgsqlConnection GetConnection()

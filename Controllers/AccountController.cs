@@ -1,5 +1,4 @@
-﻿using DocuSign.eSign.Model;
-using Microsoft.AspNetCore.Authentication;
+﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,7 +10,6 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using WebApplication1.DataAccess;
 using WebApplication1.Models;
-using static System.Formats.Asn1.AsnWriter;
 
 public class AccountController : Controller
 {
